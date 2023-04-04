@@ -1,0 +1,78 @@
+<div class="container">
+  <h2>Employee Details</h2>
+  <div class="pull-right">
+    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#empModal" (click)="openForm()">Add+</button> &nbsp;
+    <button type="button" class="btn btn-danger btn-sm " (click) = 'deletedSelected()'>Delete</button> 
+  </div>
+  <div class="form-group pull-left">
+    <input type="text" [(ngModel)] = 'searchValue' placeholder="Search.." class="form-control" id="search">
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><label><input type="checkbox" [(ngModel)] = 'isCheckedAll' class="pointer-cursor" (change)="selectAllRecord($event)"></label></th>
+        <th><span (click) = "sortData(1)">Id <i class="fa fa-sort"></i></span>
+        </th>
+        <th><span (click) = "sortData(2)">Name <i class="fa fa-sort"></i></span>
+        </th>
+        <th><span (click) = "sortData(3)">Buisiness <i class="fa fa-sort"></i></span>
+        </th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let item of employeeDetails | searchFilter:searchValue" >
+        <td>
+            <label><input type="checkbox" [(ngModel)] ="item.isChecked"  class="pointer-cursor" (change)="selectDeselectRecord()"></label>
+        </td>
+        <td>{{item.id}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.department}}</td>
+        <td>
+          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#empModal" (click)="editRecord(item)">Edit</button>&nbsp;
+          <button type="button" class="btn btn-danger btn-xs" (click)="deleteRowRecord(item.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Modal -->
+<div id="empModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{formOperation === 'add-record'?'Add Details':'Edit Details'}}</h4>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="employeeDetailsForm">
+          <div class="form-group">
+            <label for="eId">Id<span class="text-danger">*</span>:</label>
+            <input type="text" [(ngModel)]="empId" formControlName="id"  class="form-control" id="eId">
+          </div>
+          <div class="form-group">
+            <label for="name">Name<span class="text-danger">*</span>:</label>
+            <input type="text" formControlName="name"  class="form-control" id="name">
+          </div>
+          <div class="form-group">
+            <label for="dname">Department<span class="text-danger">*</span>:</label>
+            <input type="text" formControlName="department" (keyup)="alphabeticalFirstChar($event)"  class="form-control" id="dname">
+          </div>
+          <div class="form-group">
+            <label for="jdate">Joining Date<span class="text-danger">*</span>:</label>
+            <input type="date" formControlName="joining_date"  class="form-control" id="jdate">
+          </div>
+          <div class="form-group">
+            <label for="salary">Salary<span class="text-danger">*</span> :</label>
+            <input type="text" formControlName="salary"  class="form-control" id="salary">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="addEmployee()" [ngStyle]="{'opacity': deptFieldValidation ? '0.5' : ''}"  data-dismiss="modal" [disabled]="employeeDetailsForm.invalid">Submit</button>
+        <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
